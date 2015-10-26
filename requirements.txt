@@ -1,10 +1,8 @@
+progress
 requests[security]
 oauth2
 indicoio>=0.10.0
 numpy>=1.9.3
 pandas>=0.16.2
-xray>=0.6.0
-dask>=0.7.3
-python-twitter>=2.2
 matplotlib>=1.4.0
 ipython
