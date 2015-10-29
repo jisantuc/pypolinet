@@ -131,10 +131,9 @@ class NetworkParser(object):
         corpus = ' '.join(tweets)
 
         df = pd.DataFrame(
-            [self.score_tweet(corpus)],
-            index=[self.user]
+            [self.score_tweet(corpus)]
         )
-        df.index.name = 'user'
+        df['user'] = self.user
         return df
 
     def mean_scores(self, agg=False):
@@ -166,7 +165,7 @@ class NetworkParser(object):
 
         return [u['screen_name'] for u in response['users']]
 
-    def score_friends(self, friends):
+    def score_friends(self, friends, agg=True):
         if not friends:
             raise ValueError('{} has no friends.'.format(self.user))
 
@@ -181,7 +180,7 @@ class NetworkParser(object):
         )
         print 'Scoring {}\'s network...'.format(self.user)
         tweet_scores = pd.concat(
-            [u.mean_scores(agg=True) for u in bar.iter(users)]
+            [u.mean_scores(agg=agg) for u in bar.iter(users)]
         )
 
-        return tweet_scores.groupby(level='user').mean()
+        return tweet_scores.groupby('user').mean().reset_index()
